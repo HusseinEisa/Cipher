@@ -1,0 +1,123 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class PlayfairCipher {
+
+    public static List<String> preparingText(String text, String key) {
+        String alpha = "abcdefghiklmnopqrstuvwxyz";
+        List<String> matrix = new ArrayList<>();
+
+        key = key.toLowerCase();
+        text = text.toLowerCase();
+
+        key = key.replace("j", "i");
+        text = text.replace("j", "i");
+
+        for (char c : key.toCharArray()) {
+            if (!matrix.contains(String.valueOf(c))) {
+                matrix.add(String.valueOf(c));
+            }
+        }
+
+        for (char c : (key + alpha).toCharArray()) {
+            if (!matrix.contains(String.valueOf(c))) {
+                matrix.add(String.valueOf(c));
+            }
+        }
+
+        int n = 0;
+        List<String> subTexts = new ArrayList<>();
+        while (n < text.length()) {
+            subTexts.add(text.substring(n, Math.min(n + 2, text.length())));
+
+            if (!Character.isAlphabetic(subTexts.get(subTexts.size() - 1).charAt(0))) {
+                n++;
+                subTexts.set(subTexts.size() - 1, subTexts.get(subTexts.size() - 1).substring(0, 1));
+                continue;
+            } else if (subTexts.get(subTexts.size() - 1).length() > 1 && !Character.isAlphabetic(subTexts.get(subTexts.size() - 1).charAt(1))) {
+                subTexts.add(subTexts.get(subTexts.size() - 1).substring(1));
+                subTexts.set(subTexts.size() - 2, subTexts.get(subTexts.size() - 2).substring(0, 1) + "x");
+                n += 2;
+                continue;
+            }
+
+            if (subTexts.get(subTexts.size() - 1).length() == 1) {
+                subTexts.set(subTexts.size() - 1, subTexts.get(subTexts.size() - 1) + "x");
+            } else if (subTexts.get(subTexts.size() - 1).charAt(0) == subTexts.get(subTexts.size() - 1).charAt(1)) {
+                subTexts.set(subTexts.size() - 1, text.substring(n, Math.min(n + 1, text.length())) + "x");
+                n--;
+            }
+            n += 2;
+        }
+
+        return subTexts;
+    }
+
+    public static void encryptionPlayfairCipher(String text, String key) {
+        StringBuilder encryption = new StringBuilder();
+        List<String> subText = preparingText(text, key);
+
+        for (String i : subText) {
+            if (!i.matches("[a-zA-Z]+")) {
+                encryption.append(i);
+                continue;
+            }
+
+            int col1, row1, col2, row2;
+
+            row1 = matrix.indexOf(String.valueOf(i.charAt(0))) / 5;
+            col1 = matrix.indexOf(String.valueOf(i.charAt(0))) % 5;
+            row2 = matrix.indexOf(String.valueOf(i.charAt(1))) / 5;
+            col2 = matrix.indexOf(String.valueOf(i.charAt(1))) % 5;
+
+            if (row1 == row2) {
+                col1 = (col1 + 1) % 5;
+                col2 = (col2 + 1) % 5;
+            } else if (col1 == col2) {
+                row1 = (row1 + 1) % 5;
+                row2 = (row2 + 1) % 5;
+            } else {
+                int temp = col1;
+                col1 = col2;
+                col2 = temp;
+            }
+
+            encryption.append(matrix.get((row1 * 5) + col1)).append(matrix.get((row2 * 5) + col2));
+        }
+
+        System.out.println("\nThe Encryption of your Text [" + text + "] using Playfair Cipher Encryption is [" + encryption + "]");
+    }
+
+    private static List<String> matrix;
+
+    public static void main(String[] args) {
+        Scanner Read = new Scanner(System.in);
+        matrix = new ArrayList<>();
+        String alpha = "abcdefghiklmnopqrstuvwxyz";
+
+        String key = "";
+        String text = "";
+        
+        System.out.print("Enter the Text to Encrypt it : ");
+        text = Read.next();
+        text = text.toLowerCase();
+        System.out.print("Enter the Key : ");
+        key = Read.next();
+        key = key.toLowerCase();
+
+        for (char c : key.toCharArray()) {
+            if (!matrix.contains(String.valueOf(c))) {
+                matrix.add(String.valueOf(c));
+            }
+        }
+
+        for (char c : (key + alpha).toCharArray()) {
+            if (!matrix.contains(String.valueOf(c))) {
+                matrix.add(String.valueOf(c));
+            }
+        }
+
+        encryptionPlayfairCipher(text, key);
+    }
+}

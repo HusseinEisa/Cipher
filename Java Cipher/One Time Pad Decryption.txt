@@ -1,0 +1,37 @@
+import java.util.Scanner;
+
+public class OneTimePadDecryption {
+
+    public static void decryptionOneTimePad(String text, String key) {
+        StringBuilder decryptionText = new StringBuilder();
+
+        int[] decryption = new int[key.length()];
+
+        for (int i = 0; i < key.length(); i++) {
+            decryption[i] = (text.charAt(i) - 'A') - (key.charAt(i) - 'A');
+
+            if (decryption[i] < 0) {
+                decryption[i] += 26;
+            }
+        }
+
+        for (int i = 0; i < key.length(); i++) {
+            int x = decryption[i] + 'A';
+            decryptionText.append((char) x);
+        }
+
+        System.out.println("\nDecryption Text using One-Time-Pad cipher is: " + decryptionText);
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String key, text;
+
+        System.out.print("\nPlease, Enter the Text to Decrypt it : ");
+        text = scanner.nextLine().toUpperCase();
+        System.out.print("Please, Enter the Key : ");
+        key = scanner.nextLine().toUpperCase();
+
+        decryptionOneTimePad(text, key);
+    }
+}

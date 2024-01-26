@@ -1,0 +1,48 @@
+import java.util.Scanner;
+
+public class RailFenceEncryption {
+
+    public static String encryptionRailFence(String text, int key) {
+        char[][] rail = new char[key][text.length()];
+        boolean dirDown = false;
+        int row = 0, col = 0;
+
+        for (int i = 0; i < text.length(); i++) {
+            if (row == 0 || row == key - 1) {
+                dirDown = !dirDown;
+            }
+
+            rail[row][col++] = text.charAt(i);
+
+            if (dirDown) {
+                row++;
+            } else {
+                row--;
+            }
+        }
+
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < key; i++) {
+            for (int j = 0; j < text.length(); j++) {
+                if (rail[i][j] != 0) {
+                    result.append(rail[i][j]);
+                }
+            }
+        }
+
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String text;
+        int key;
+
+        System.out.print("\nPlease, Enter the Text to Encrypt it : ");
+        text = scanner.nextLine().toUpperCase();
+        System.out.print("Please, Enter the Key : ");
+        key = scanner.nextInt();
+
+        System.out.println("\nEncryption Text using Rail Fence cipher is: " + encryptionRailFence(text, key));
+    }
+}

@@ -1,0 +1,76 @@
+import java.util.Scanner;
+
+public class RailFenceDecryption {
+
+    public static String decryptionRailFence(String text, int key) {
+        char[][] rail = new char[key][text.length()];
+        boolean dirDown = false;
+        int row = 0, col = 0;
+
+        for (int i = 0; i < text.length(); i++) {
+            if (row == 0) {
+                dirDown = true;
+            }
+            if (row == key - 1) {
+                dirDown = false;
+            }
+
+            rail[row][col] = '*';
+            col++;
+
+            if (dirDown) {
+                row++;
+            } else {
+                row--;
+            }
+        }
+
+        int index = 0;
+        for (int i = 0; i < key; i++) {
+            for (int j = 0; j < text.length(); j++) {
+                if (rail[i][j] == '*' && index < text.length()) {
+                    rail[i][j] = text.charAt(index);
+                    index++;
+                }
+            }
+        }
+
+        StringBuilder result = new StringBuilder();
+        row = 0;
+        col = 0;
+        for (int i = 0; i < text.length(); i++) {
+            if (row == 0) {
+                dirDown = true;
+            }
+            if (row == key - 1) {
+                dirDown = false;
+            }
+
+            if (rail[row][col] != '*') {
+                result.append(rail[row][col]);
+                col++;
+            }
+
+            if (dirDown) {
+                row++;
+            } else {
+                row--;
+            }
+        }
+
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String text;
+        int key;
+
+        System.out.print("\nPlease, Enter the Text to Decrypt it : ");
+        text = scanner.nextLine().toUpperCase();
+        System.out.print("Please, Enter the Key : ");
+        key = scanner.nextInt();
+
+        System.out.println("\nDecryption Text using Rail Fence cipher is: " + decryptionRailFence(text, key));
+    }
+}

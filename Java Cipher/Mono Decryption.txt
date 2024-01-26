@@ -1,0 +1,64 @@
+import java.util.Scanner;
+
+
+class Main {
+    // Function to Prepare the Key 
+    public static String PreparingKey (String Key){
+        String[] Alpha = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+        String Mono_Key = "";
+        
+        for (int n=0; n<Key.length(); n++){
+            if (Mono_Key.contains(Key.substring(n, n+1))){
+                continue;
+            }
+            else{
+                Mono_Key += Key.charAt(n);
+            }
+        }
+        
+        for (String X: Alpha) {
+            if (Mono_Key.contains(X)){
+                continue;
+            }
+            else{
+                Mono_Key += X;
+            }
+        }
+        return Mono_Key;
+    }
+    
+    
+    public static void Decrypt_MonoChipher (String Key, String Alpha, String Text){
+        
+        String DecryptionText = "";
+        
+        for(int i=0; i<Text.length(); i++){
+            int Index = Key.indexOf(Text.charAt(i));
+            DecryptionText += Alpha.charAt(Index);
+            
+        }
+        
+        System.out.println("\nThe Decryption Text is : "+DecryptionText);
+    }
+    
+
+    public static void main(String[] args){
+        
+        String Alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        
+        Scanner Input = new Scanner(System.in);
+    
+        String Key, Text;
+        System.out.print("Enter Key: ");
+        Key = Input.next();
+        Key = Key.toUpperCase();
+        
+        System.out.print("Enter the Text to Decrypt it : ");
+        Text = Input.next();
+        Text = Text.toUpperCase();
+    
+        Key = PreparingKey(Key);
+        
+        Decrypt_MonoChipher(Key,Alpha,Text);
+    }
+}
